@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+VERSION=9.10.1
+
+wget ftp://ftp.isc.org/isc/bind9/$VERSION/bind-$VERSION.tar.gz
+tar xvzf bind-$VERSION.tar.gz
+cd bind-$VERSION
+
+./configure --enable-threads --disable-chroot --disable-linux-caps \
+    --enable-full-report --disable-backtrace --disable-symtable
+# Patch makefiles to turn on -fPIC for ALL code
+find . -type f -name Makefile -exec sed -i 's/CFLAGS =\(.*\)/CFLAGS =-fPIC \1/' {} \;
+# bin/named must link with -shared to generate a .so
+sed -i 's/^LDFLAGS =\(.*\)/LDFLAGS =-shared \1/' bin/named/Makefile
