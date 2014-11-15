@@ -7,7 +7,7 @@ tar xvzf bind-$VERSION.tar.gz
 cd bind-$VERSION
 
 ./configure --enable-threads --disable-chroot --disable-linux-caps \
-    --enable-full-report --disable-backtrace --disable-symtable
+    --enable-full-report --disable-backtrace --disable-symtable --enable-getifaddrs=no
 # Patch makefiles to turn on -fPIC for ALL code
 find . -type f -name Makefile -exec sed -i 's/CFLAGS =\(.*\)/CFLAGS =-fPIC \1/' {} \;
 # bin/named must link with -shared to generate a .so
